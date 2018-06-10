@@ -36,8 +36,6 @@ var jugador= new Player();
 var cursores;
 var suelo;
 
-var game = new Phaser.Game(config);
-
 function preload ()
 {
     this.load.image('sky', 'assets/sky.png');
@@ -67,6 +65,12 @@ function create ()
         repeat: -1
     });
 
+    this.anims.create({
+        key: 'turn',
+        frames: [ { key: 'dude', frame: 4 } ],
+        frameRate: 20
+    });
+    
     this.anims.create({
         key: 'right',
         frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
