@@ -49,15 +49,15 @@ function create ()
    
     game.add.image(400, 300, 'sky');
     
-    players = game.add.group();
+    /*players = game.add.group();
     players.enableBody=true;
-    players.physicsBodyTipe = Phaser.Physics.ARCADE;
+    players.physicsBodyTipe = Phaser.Physics.ARCADE;*/
     
     
      
     
-    //No sé si esto va
-   // jugador = this.physics.add.sprite(100, 450, 'dude'); 
+    //SI VA
+    jugador = this.physics.add.sprite(100, 450, 'dude'); 
 
     suelo = game.physics.add.staticGroup();
     suelo.create(400, 568, 'ground').setScale(2).refreshBody();
@@ -84,7 +84,7 @@ function create ()
   
     cursores = game.input.keyboard.createCursorKeys();
     
-    game.physics.add.collider(jugador, suelo); //No sé si esto esta bien
+    game.physics.add.collider(jugador, suelo); 
 
 }
 
@@ -115,7 +115,7 @@ class Player extends Phaser.Sprite{
 constructor(){
 super(game, 100, 450, 'dude');
 game.add.existing(this);
-players.add(this);
+//players.add(this);
 this.setBounce(0.2);
 this.setCollideWorldBounds(true);
 }
