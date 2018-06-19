@@ -53,9 +53,8 @@ function create ()
     players.enableBody=true;
     players.physicsBodyTipe = Phaser.Physics.ARCADE;
     
-    //No se si estos dos deberias escribirse con la variable jugador o con el grupo players
-    jugador.setBounce(0.2);
-    jugador.setCollideWorldBounds(true); 
+    
+     
     
     //No sé si esto va
    // jugador = this.physics.add.sprite(100, 450, 'dude'); 
@@ -116,6 +115,8 @@ constructor(){
 super(game, 100, 450, 'dude');
 game.add.existing(this);
 players.add(this);
+jugador.setBounce(0.2);
+jugador.setCollideWorldBounds(true);
 }
 
 function moverseDer(){
