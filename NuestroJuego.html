@@ -3,7 +3,7 @@
 <head> 
     <meta charset="UTF-8" />
     <title>Gilio Monza</title>
-    <script src="phaser.js"></script>
+    <script src="phaserV2.js"></script>
     <style type="text/css">
         body {
             margin: 0;
@@ -13,26 +13,7 @@
 <body>
 
 <script type="text/javascript">
-var config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 300 },
-            debug: false
-        }
-    },
-    scene: {
-        preload: preload,
-        create: create,
-        update: update
-    }
-};
-var game = new Phaser.Game(config);
-var jugador;
-var cursores;
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 
 function preload ()
@@ -41,10 +22,15 @@ function preload ()
     game.load.image('ground', 'assets/platform.png');
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 }
+
+var cursores;		
+var suelo;
+var players;
+
 function create ()
 {
     game.physics.startSystem(Phaser.Physics.ARCADE);
-    game.add.image(400, 300, 'sky');
+    game.add.image(0, 0, 'sky');
 
     suelo = game.add.group();
     suelo.enableBody = true;
@@ -52,35 +38,50 @@ function create ()
     piso.scale.setTo(2, 2);
     piso.body.immovable = true;
     
-    players = this.add.group();
+    players = game.add.group();
     players.enableBody=true;
     players.physicsBodyTipe = Phaser.Physics.ARCADE;
-   
-    jugador = new Player();
   
-    cursores = this.input.keyboard.createCursorKeys();
+    cursores = game.input.keyboard.createCursorKeys();
+
+    var jugador = new Player();
 }
 
 function update ()
 { 
-    var colisionSuelo= game.physics.arcade.collide(jugadores, suelo); 
+    var colisionSuelo= game.physics.arcade.collide(players, suelo); 
     
-     jugador.nada();
+     players.forEach(function (item){
+            item.nada();
+        }
+        )
    if (cursores.left.isDown)
     {
-        jugador.correrIzq();
+        players.forEach(function (item){
+            item.correrIzq();
+        }
+        )
     }
     else if (cursores.right.isDown)
     {
-        jugador.correrDer();
+        players.forEach(function (item){
+            item.correrDer();
+        }
+        )
     }
     else
     {
-        jugador.quieto();
+       players.forEach(function (item){
+            item.quieto();
+        }
+        )
     }
     if (cursores.up.isDown && colisionSuelo)
     {
-        jugador.salto();
+        players.forEach(function (item){
+        item.salto();
+        }
+        )
     }
    
 
@@ -88,7 +89,7 @@ function update ()
 
 class Player extends Phaser.Sprite{ 
 
-constructor(game){
+constructor(){
 super(game, 32, 150, 'dude'); 
 game.add.existing(this);
 players.add(this);
