@@ -63,24 +63,26 @@ function create ()
 
 function update ()
 { 
-    var player = new Jugador();
-   /*if (cursores.left.isDown)
+    var colisionSuelo= game.physics.arcade.collide(jugadores, suelo); 
+    
+     jugador.nada();
+   if (cursores.left.isDown)
     {
-        jugador.moverseIzq();
+        jugador.correrIzq();
     }
     else if (cursores.right.isDown)
     {
-        jugador.moverseDer();
+        jugador.correrDer();
     }
     else
     {
-        jugador.nada();
+        jugador.quieto();
     }
-    if (cursores.up.isDown && jugador.body.touching.down)
+    if (cursores.up.isDown && colisionSuelo)
     {
-        jugador.saltar();
+        jugador.salto();
     }
-    */
+   
 
 }
 
@@ -93,25 +95,38 @@ players.add(this);
     
 this.animations.add('left', [0, 1, 2, 3], 10, true);
 this.animations.add('right', [5, 6, 7, 8], 10, true);
+this.body.gravity.y=250;
+this.body.bounce.y=0.2;
+this.body.collideWorldBounds=true;
 
 }
+    correrIzq()
+    {
+        this.body.velocity.x = -150;
 
-/*function moverseDer(){
-    this.setVelocityX(160);
-    this.anims.play('right', true);
-}
-function moverseIzq(){
-    this.setVelocityX(-160);
-    this.anims.play('left', true);
-}
-function nada(){
-    this.setVelocityX(0);
-    this.anims.play('turn');
-}
-function saltar(){
-    this.setVelocityY(-330);
-}
-*/
+        this.animations.play('left');
+    }
+
+    correrDer(){
+        this.body.velocity.x = 150;
+
+        this.animations.play('right');
+    }
+
+    quieto(){
+        this.animations.stop();
+
+         this.frame = 4;
+     }
+
+     salto()
+    {
+         this.body.velocity.y = -330;
+    }
+
+    nada(){
+        this.body.velocity.x = 0;
+    }
 }
 </script>
 </body>
