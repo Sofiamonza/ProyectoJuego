@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8" />
-    <title>Bobby</title>
+    <title>Gilio Monza</title>
     <script src="phaserV2.js"></script>
     <style type="text/css">
         body {
@@ -13,19 +13,22 @@
 <body>
 
 <script type="text/javascript">
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(510, 550, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 
 function preload ()
 {
-    game.load.image('sky', 'assets/sky.png');
+    game.load.image('sky', 'assets/space.jpg');
     game.load.image('ground', 'assets/platform.png');
-    game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+    game.load.spritesheet('dude', 'assets/bobby.png', 32, 32);
+    game.load.spritesheet('fruit', 'assets/fruitnveg32wh37.png', 32, 32);
 }
 
 var cursores;		
 var suelo;
 var players;
+var score = 0;
+var scoreText;
 
 function create ()
 {
@@ -94,8 +97,8 @@ super(game, 32, 150, 'dude');
 game.add.existing(this);
 players.add(this);
     
-this.animations.add('left', [0, 1, 2, 3], 10, true);
-this.animations.add('right', [5, 6, 7, 8], 10, true);
+this.animations.add('left', [0, 1], 7, true);
+this.animations.add('right', [2,3], 7, true);
 this.body.gravity.y=250;
 this.body.bounce.y=0.2;
 this.body.collideWorldBounds=true;
@@ -117,7 +120,7 @@ this.body.collideWorldBounds=true;
     quieto(){
         this.animations.stop();
 
-         this.frame = 4;
+         this.frame = 2;
      }
 
      salto()
@@ -132,3 +135,4 @@ this.body.collideWorldBounds=true;
 </script>
 </body>
 </html>
+
