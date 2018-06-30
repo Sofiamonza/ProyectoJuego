@@ -2,7 +2,9 @@
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8" />
-    <title>Gilio Monza</title>
+
+     <title>Bobby, el perrito espacial</title>
+
     <script src="phaserV2.js"></script>
     <style type="text/css">
         body {
@@ -20,8 +22,11 @@ function preload ()
 {
     game.load.image('sky', 'assets/space.jpg');
     game.load.image('ground', 'assets/platform.png');
+    game.load.image('bomb', 'assets/bomb.png');
     game.load.spritesheet('dude', 'assets/bobby.png', 32, 32);
     game.load.spritesheet('fruit', 'assets/fruitnveg32wh37.png', 32, 32);
+    game.load.audio('audio', 'assets/WagonWheel.ogg');
+
 }
 
 var cursores;		
@@ -29,10 +34,18 @@ var suelo;
 var players;
 var score = 0;
 var scoreText;
-
+var bomb;
+var gameOver=false;
+var perdiste;
+var musica;
 function create ()
 {
     game.physics.startSystem(Phaser.Physics.ARCADE);
+
+    musica = game.add.audio('audio');
+    musica.volume=0.5;
+    musica.play();
+  
     game.add.image(0, 0, 'sky');
 
     suelo = game.add.group();
@@ -47,15 +60,46 @@ function create ()
   
     cursores = game.input.keyboard.createCursorKeys();
 
+
+    fruta = game.add.emitter(game.world.centerX, 0, 20);
+    fruta.makeParticles('fruit', [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20], 200,true, true);
+    fruta.width = game.world.width;
+    fruta.minParticleScale = 0.5;
+    fruta.maxParticleScale =1.3;
+    fruta.setYSpeed(200, 400);
+	  fruta.setXSpeed(-5, 5);
+    fruta.gravity = 150;
+
+    bomb = game.add.emitter(game.world.centerX, 0, 20);
+    bomb.makeParticles('bomb', [1], 5,true, true);
+    bomb.width = game.world.width;
+    bomb.ParticleScale = 1;
+    bomb.setYSpeed(200, 400);
+	  bomb.setXSpeed(-5, 5);
+    bomb.gravity = 150;
+
+    fruta.start(false, 2600,2200);
+    bomb.start(false, 2600,2200)
+    scoreText = game.add.text(16, 16, '¡Fruta comida!: 0', { fontSize: '32px', fill: '#FFF' });
+    
     var jugador = new Player();
 }
 
 function update ()
 { 
     var colisionSuelo= game.physics.arcade.collide(players, suelo); 
-    
-     players.forEach(function (item){
-            item.nada();
+
+    game.physics.arcade.overlap(players, fruta, collectfruta, null, game);
+    game.physics.arcade.collide(players, bomb, muerte, null, game);
+
+    if (gameOver)
+    {
+        perdiste = game.add.text(game.world.centerX,game.world.centerY, '¡Perdiste!', { fontSize: '32px', fill: '#F00' });
+        scoreText.destroy();
+       // return 0;
+    }
+    players.forEach(function (item){
+            item.roce();
         }
         )
    if (cursores.left.isDown)
@@ -91,7 +135,6 @@ function update ()
 }
 
 class Player extends Phaser.Sprite{ 
-
 constructor(){
 super(game, 32, 150, 'dude'); 
 game.add.existing(this);
@@ -104,15 +147,16 @@ this.body.bounce.y=0.2;
 this.body.collideWorldBounds=true;
 
 }
+
     correrIzq()
     {
-        this.body.velocity.x = -150;
+        this.body.velocity.x = -200;
 
         this.animations.play('left');
     }
 
     correrDer(){
-        this.body.velocity.x = 150;
+        this.body.velocity.x = 200;
 
         this.animations.play('right');
     }
@@ -123,16 +167,36 @@ this.body.collideWorldBounds=true;
          this.frame = 2;
      }
 
-     salto()
+    salto()
     {
          this.body.velocity.y = -330;
     }
 
-    nada(){
+    roce(){
         this.body.velocity.x = 0;
     }
 }
+
+function collectfruta (player, fruta)
+{
+  
+    fruta.destroy();
+    score += 1;
+    scoreText.setText('¡Fruta comida!: ' + score);
+
+}
+
+function muerte (player, bomb)
+{
+
+    player.tint = 0xff0000;
+    bomb.destroy();
+    player.frame = 2;
+
+    gameOver = true;
+}
+
+
 </script>
 </body>
 </html>
-
